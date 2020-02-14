@@ -1,5 +1,6 @@
 package com.mapsexample
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
@@ -18,7 +19,6 @@ import com.google.android.gms.maps.model.*
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
     private lateinit var lastLocatioon: Location
 
     companion object{
@@ -36,6 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMarkerC
         mapFragment.getMapAsync(this)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@MapsActivity)
+
     }
     /**
      * Manipulates the map once available.
@@ -60,11 +61,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMarkerC
 
     }
 
-    private fun placeMarker(location: LatLng){
+    private fun placeMarker(location: LatLng,empresa: LatLng){
 
         val markerOption = MarkerOptions().position(location)
+        val markerOption2 = MarkerOptions().position(empresa)
         markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
-        map.addMarker(markerOption)
+        map.addMarker(markerOption2.title("Giro"))
+        map.addMarker(markerOption.title("Mi ubicación"))
+
 
     }
 
@@ -85,16 +89,49 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMarkerC
             if (location != null){
                 lastLocatioon = location
                 val currentLatLong = LatLng(location.latitude,location.longitude)
-                placeMarker(currentLatLong)
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong,13f))
+                val empresa = LatLng(20.669731,-103.368986)
+                val lat = location.latitude
+                val lng = location.longitude
+                val late = 20.670
+                val lnge:Double = -103.369
+                placeMarker(currentLatLong,empresa)
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(empresa,13f))
 
                 map.addCircle(CircleOptions()
-                    .center(currentLatLong)
-                    .radius(300.00)
-                    .strokeWidth(3f)
+                    .center(empresa)
+                    .radius(10.00)
+                    .strokeWidth(1f)
                     .strokeColor(Color.BLUE)
                     .fillColor(Color.GRAY)
                 )
+
+
+
+                when(currentLatLong){
+                    empresa->{
+
+                    }
+
+                    else->{
+                        when(lat){
+
+                            in lat..late->{
+                               when(lng){
+
+                                   in lnge..lng->{
+
+                                       val intent = Intent(applicationContext, PruebaUbi::class.java)
+
+                                       startActivity(intent)
+
+                                   }
+                               }
+                            }
+
+                        }
+
+                    }
+                }
             }
 
         }
