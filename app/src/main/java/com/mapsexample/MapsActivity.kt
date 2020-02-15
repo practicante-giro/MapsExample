@@ -99,8 +99,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMarkerC
                 val empresa = LatLng(20.669731,-103.368986)
                 val lat = location.latitude
                 val lng = location.longitude
-                val late = 20.670
-                val lnge:Double = -103.369
+                val late = 20.669731
+                val lnge:Double = -103.368986
 
                 placeMarker(currentLatLong,empresa)
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(empresa,13f))
